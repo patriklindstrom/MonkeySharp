@@ -21,5 +21,17 @@ namespace MonkeySharp.Test
             //Assert
             Assert.True("Hello Mr Tester" == helloTestMsg) ;
         }
+        [Test]
+        public void Test_read_next_token()
+        {
+            // Arrange
+            var testInput = "=+(){},;";
+            var sut = new Lexer.Lexer();
+            // Act
+            sut.NextToken();
+            // Assert
+            Assert.True(false,$"The simple lexer did not work tokentype is wrong expected:  got : ");
+        }
     }
+ 
 }
