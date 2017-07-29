@@ -49,5 +49,11 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MonkeySharp.Lexer\MonkeySharp.Lexer.csproj">
+      <Project>{4d4e908d-2af1-4a62-9684-dbec084f1c48}</Project>
+      <Name>MonkeySharp.Lexer</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
