@@ -2,9 +2,12 @@
 {
     public class Lexer
     {
-        public Lexer()
+        public string ToParse { get; set; }
+        private int Pos { get; set; }
+
+        public Lexer(string toParse)
         {
-            
+            ToParse = toParse;
         }
 
 

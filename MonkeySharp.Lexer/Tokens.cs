@@ -38,9 +38,9 @@ namespace MonkeySharp.Lexer
         public const string LET = "LET";
     }
 
-    struct Token
+   public struct Token
     {
-        private string TokenType;
-        private string Literal;
+        public string TokenType;
+        public string Literal;
     }
 }

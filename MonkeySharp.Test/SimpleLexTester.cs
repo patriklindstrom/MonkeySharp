@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using NUnit.Framework.Internal;
+using MonkeySharp.Lexer;
 
 namespace MonkeySharp.Test
 {
@@ -26,7 +27,17 @@ namespace MonkeySharp.Test
         {
             // Arrange
             var testInput = "=+(){},;";
-            var sut = new Lexer.Lexer();
+            var expectedTokens = new List<Token>
+            {
+                new Token() {Literal = "=", TokenType = Tokens.ASSIGN}
+               , new Token() {Literal = "+", TokenType = Tokens.PLUS}
+               , new Token() {Literal = "(", TokenType = Tokens.LPAREN}
+               , new Token() {Literal = ")", TokenType = Tokens.RPAREN}
+               , new Token() {Literal = "{", TokenType = Tokens.LBRACE}
+               , new Token() {Literal = "}", TokenType = Tokens.RBRACE}
+            };
+
+            var sut = new Lexer.Lexer(testInput);
             // Act
             sut.NextToken();
             // Assert
