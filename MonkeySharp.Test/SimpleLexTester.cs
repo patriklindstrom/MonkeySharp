@@ -29,18 +29,27 @@ namespace MonkeySharp.Test
             var testInput = "=+(){},;";
             var expectedTokens = new List<Token>
             {
-                new Token() {Literal = "=", TokenType = Tokens.ASSIGN}
-               , new Token() {Literal = "+", TokenType = Tokens.PLUS}
-               , new Token() {Literal = "(", TokenType = Tokens.LPAREN}
-               , new Token() {Literal = ")", TokenType = Tokens.RPAREN}
-               , new Token() {Literal = "{", TokenType = Tokens.LBRACE}
-               , new Token() {Literal = "}", TokenType = Tokens.RBRACE}
+                new Token(Tokens.ASSIGN, "=")
+               , new Token(Tokens.PLUS  , "+")
+               , new Token(Tokens.LPAREN  , "(")
+               , new Token(Tokens.RPAREN  , ")")
+               , new Token(Tokens.LBRACE  , "{")
+               , new Token(Tokens.RBRACE  , "}")
+               , new Token(Tokens.SEMICOLON  , ";")
+               , new Token(Tokens.EOF  , "")
             };
 
             var sut = new Lexer.Lexer(testInput);
-            // Act
-            sut.NextToken();
+            var lexTestResult = new List<Token>();
+            // Act 
+            foreach (var t in expectedTokens)
+            {
+                Token token = sut.NextToken();
+                lexTestResult.Add(token);
+            }
+            
             // Assert
+            CollectionAssert.AreEqual(expectedTokens,lexTestResult, $"The simple lexer did not work tokentype is wrong expected:  got : ");
             Assert.True(false,$"The simple lexer did not work tokentype is wrong expected:  got : ");
         }
     }
