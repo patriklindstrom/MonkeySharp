@@ -7,9 +7,19 @@ using System.Threading.Tasks;
 using NUnit.Framework;
 using NUnit.Framework.Internal;
 using MonkeySharp.Lexer;
+using NUnit.Framework.Internal.Execution;
 
 namespace MonkeySharp.Test
 {
+    public class TokenComparer : Comparer<Token>
+    {
+        public override int Compare(Token x, Token y)
+        {
+            var literalCompare = String.Compare(x.Literal, y.Literal, StringComparison.Ordinal);
+            var tokentypeCompare = String.Compare(x.TokenType, y.TokenType, StringComparison.Ordinal);
+            return literalCompare == 0 && tokentypeCompare == 0 ? 0 : -1;
+        }
+    }
     [TestFixture]
     public class SimpleLexTester
     {
@@ -46,11 +56,9 @@ namespace MonkeySharp.Test
             {
                 Token token = sut.NextToken();
                 lexTestResult.Add(token);
-            }
-            
+            }            
             // Assert
-            CollectionAssert.AreEqual(expectedTokens,lexTestResult, $"The simple lexer did not work tokentype is wrong expected:  got : ");
-            Assert.True(false,$"The simple lexer did not work tokentype is wrong expected:  got : ");
+            CollectionAssert.AreEqual(expectedTokens, lexTestResult, new TokenComparer(), "The simple lexer did not work tokentype is wrong in test");
         }
     }
  

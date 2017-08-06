@@ -9,11 +9,9 @@
         {
             ToParse = toParse;
         }
-
-
-        public void NextToken()
+        public Token NextToken()
         {
-            throw new System.NotImplementedException();
+           return new Token(Tokens.EOF, "");
         }
     }
 }
