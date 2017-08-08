@@ -27,10 +27,10 @@ namespace MonkeySharp.Lexer
         public const string COMA = ",";
         public const string SEMICOLON = ";";
 
-        public const string LPAREN = "+";
-        public const string RPAREN = "+";
-        public const string LBRACE = "+";
-        public const string RBRACE = "+";
+        public const string LPAREN = "(";
+        public const string RPAREN = ")";
+        public const string LBRACE = "{";
+        public const string RBRACE = "}";
 
 
         //Keywords
@@ -38,9 +38,15 @@ namespace MonkeySharp.Lexer
         public const string LET = "LET";
     }
 
-    struct Token
-    {
-        private string TokenType;
-        private string Literal;
+   public class Token
+    { 
+        public string TokenType;
+        public string Literal;
+
+        public Token(string tokenType, string literal)
+        {
+            TokenType = tokenType;
+            Literal = literal;
+        }
     }
 }
