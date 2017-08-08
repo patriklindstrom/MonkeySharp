@@ -45,10 +45,10 @@ namespace MonkeySharp.Test
                , new Token(Tokens.RPAREN  , ")")
                , new Token(Tokens.LBRACE  , "{")
                , new Token(Tokens.RBRACE  , "}")
+               , new Token(Tokens.COMA  , ",")
                , new Token(Tokens.SEMICOLON  , ";")
-               , new Token(Tokens.EOF  , "")
+               , new Token(Tokens.EOF  , ((char)0).ToString())
             };
-
             var sut = new Lexer.Lexer(testInput);
             var lexTestResult = new List<Token>();
             // Act 
