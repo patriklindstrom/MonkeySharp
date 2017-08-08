@@ -17,6 +17,10 @@ namespace MonkeySharp.Lexer
             ReadChar();
         }
         // ToDO: Replace switch with dictionary instead ?  https://stackoverflow.com/questions/11617091/in-a-switch-vs-dictionary-for-a-value-of-func-which-is-faster-and-why
+        public bool IsLetter(char chr)
+        {
+            return 'a' <= chr && chr <= 'z' || 'A' <= chr && chr <= 'Z' || chr == '_';
+        }
         public Token NextToken()
         {
             Token tok;
@@ -50,22 +54,39 @@ namespace MonkeySharp.Lexer
                 case (char)0:
                     tok = ParseToken(Tokens.EOF,(char)0);
                     break;
-                default: throw new Exception("Cannot parse nextchar");
+                default:
+                {
+                        if (IsLetter(ch))
+                    {
+                        tok = new Token(tokenType:Tokens.UNKNOWN, literal: readIdentifier());
+                        return tok;
+                    }
+                        else
+                        {
+                            tok = new Token(tokenType: Tokens.ILLEGAL, literal: ch.ToString());
+                        }
+                        break;
+                }
             }
             ReadChar();
            return tok;
         }
 
-        private Token ParseToken(string tokenType)
+        private string readIdentifier()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Token ParseToken(string tokenType)
         {
             var  tok = new Token(tokenType: tokenType, literal: tokenType);
             Debug.Print($"Parse NextToken as type: {tok.TokenType} with value: {tok.Literal}");
             return tok;
         }
 
-        private Token ParseToken(string tokenType,char ch)
+        public Token ParseToken(string tokenType,char letterToParse)
         {
-            var tok = new Token(tokenType: tokenType, literal: ch.ToString());
+            var tok = new Token(tokenType: tokenType, literal: letterToParse.ToString());
             Debug.Print($"Parse NextToken as type: {tok.TokenType} with value: {tok.Literal}");
             return tok;
         }

@@ -16,6 +16,7 @@ namespace MonkeySharp.Lexer
         private Tokens() { }
 
         public const string ILLEGAL = "ILLEGAL";
+        public const string UNKNOWN = "UNKNOWN";
         public const string EOF = "EOF";
         // Identifiers + literals
         public const string IDENT  = "IDENT"; // add, foobar , x,y,...
