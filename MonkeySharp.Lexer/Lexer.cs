@@ -58,7 +58,7 @@ namespace MonkeySharp.Lexer
                 {
                         if (IsLetter(ch))
                     {
-                        tok = new Token(tokenType:Tokens.UNKNOWN, literal: readIdentifier());
+                        tok = new Token(tokenType:Tokens.UNKNOWN, literal: ReadIdentifier());
                         return tok;
                     }
                         else
@@ -72,9 +72,15 @@ namespace MonkeySharp.Lexer
            return tok;
         }
 
-        private string readIdentifier()
+        private string ReadIdentifier()
         {
-            throw new NotImplementedException();
+            var position =this.Pos;
+            while (IsLetter(this.ch))
+            {
+                this.ReadChar();
+            }
+            int length = this.Pos - position;
+            return this.ToParse.Substring(position, length);
         }
 
         public Token ParseToken(string tokenType)

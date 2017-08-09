@@ -93,7 +93,10 @@ namespace MonkeySharp.Test
         public void Simple_Test_read_simple_Statement()
         {
             // Arrange
-            var testInput = @"
+            var testInput =
+                #region testInputStatement
+
+                @"
                 let five = 5;
 let ten = 10;
 
@@ -103,9 +106,11 @@ let add = fn(x, y) {
 
 let result = add(five, ten);
             ";
+            #endregion 
             //Act
             var expectedTokens = new List<Token>
-            {
+            #region expectedListDef
+                  {
           new Token(Tokens.LET, "let")
         , new Token(Tokens.IDENT, "five")
         , new Token(Tokens.ASSIGN, "=")
@@ -144,6 +149,7 @@ let result = add(five, ten);
         , new Token(Tokens.SEMICOLON, ";")
                , new Token(Tokens.EOF  , ((char)0).ToString())
             };
+            #endregion
             var sut = new Lexer.Lexer(testInput);
             var lexTestResult = new List<Token>();
             foreach (var t in expectedTokens)
@@ -151,7 +157,6 @@ let result = add(five, ten);
                 Token token = sut.NextToken();
                 lexTestResult.Add(token);
             }
-
             // Assert
             CollectionAssert.AreEqual(expectedTokens, lexTestResult, new TokenComparer(), "The simple lexer did not work tokentype is wrong in statement test");
         }
