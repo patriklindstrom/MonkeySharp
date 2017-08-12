@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Text;
+using System.Xml;
 
 namespace MonkeySharp.Lexer
 {
@@ -10,10 +13,16 @@ namespace MonkeySharp.Lexer
         private int Pos { get; set; }
         private  int ReadPosition { get; set; }
         private  char ch { get; set; }
-
+        private Dictionary<string,string> KeyWords { get; set; }
         public Lexer(string toParse)
         {
+
             ToParse = toParse;
+            KeyWords = new Dictionary<string, string>
+            {
+                  ["fn"] = Tokens.FUNCTION
+                , ["let"] = Tokens.LET
+            };
             ReadChar();
         }
         // ToDO: Replace switch with dictionary instead ?  https://stackoverflow.com/questions/11617091/in-a-switch-vs-dictionary-for-a-value-of-func-which-is-faster-and-why
@@ -21,10 +30,16 @@ namespace MonkeySharp.Lexer
         {
             return 'a' <= chr && chr <= 'z' || 'A' <= chr && chr <= 'Z' || chr == '_';
         }
+
+        public bool IsDigit(char chr)
+        {
+            return '0' <= ch && ch <= '9';
+
+        }
         public Token NextToken()
         {
             Token tok;
-
+            this.SkipWhiteSpace();
             switch (ch)
             {
                 case '=':
@@ -57,10 +72,20 @@ namespace MonkeySharp.Lexer
                 default:
                 {
                         if (IsLetter(ch))
-                    {
-                        tok = new Token(tokenType:Tokens.UNKNOWN, literal: ReadIdentifier());
+                        {
+                            var tokLiteral = this.ReadIdentifier();
+                            var tokType = LookupIdentifier(tokLiteral);
+                        tok = new Token(tokenType: tokType, literal: tokLiteral);
+                            
                         return tok;
-                    }
+                    } else if (IsDigit(this.ch))
+                        {
+                            var tokType = Tokens.INT;
+                            var tokLiteral = this.ReadNumber();
+                            tok = new Token(tokenType: tokType, literal: tokLiteral);
+                            return tok;
+
+                        }
                         else
                         {
                             tok = new Token(tokenType: Tokens.ILLEGAL, literal: ch.ToString());
@@ -70,6 +95,41 @@ namespace MonkeySharp.Lexer
             }
             ReadChar();
            return tok;
+        }
+
+        private string ReadNumber()
+        {
+            var position=this.Pos;
+            while (IsDigit(this.ch))
+        {
+            this.ReadChar();
+        }
+            int length = this.Pos - position;
+            return this.ToParse.Substring(position, length);
+        }
+
+
+        public  string LookupIdentifier(string tokLiteral)
+    {
+        var foundToken = this.KeyWords[tokLiteral];
+        if (foundToken != null)
+        {
+            return foundToken;
+        }
+        else
+        {
+            return Tokens.IDENT;
+        }
+
+    }
+
+        private void SkipWhiteSpace()
+        {
+            while (this.ch == ' ' || this.ch == '\t' || this.ch == '\n' || this.ch == '\r')
+            {
+                this.ReadChar();
+            }
+         
         }
 
         private string ReadIdentifier()
@@ -97,7 +157,7 @@ namespace MonkeySharp.Lexer
             return tok;
         }
 
-        private void ReadChar()
+        public void ReadChar()
         {
             ch = ReadPosition >= ToParse.Length ? (char) 0 : ToParse[ReadPosition];
             Pos = ReadPosition;
