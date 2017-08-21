@@ -110,18 +110,9 @@ namespace MonkeySharp.Lexer
 
 
         public  string LookupIdentifier(string tokLiteral)
-    {
-        var foundToken = this.KeyWords[tokLiteral];
-        if (foundToken != null)
         {
-            return foundToken;
+            return this.KeyWords.ContainsKey(tokLiteral) ? this.KeyWords[tokLiteral] : Tokens.IDENT;
         }
-        else
-        {
-            return Tokens.IDENT;
-        }
-
-    }
 
         private void SkipWhiteSpace()
         {

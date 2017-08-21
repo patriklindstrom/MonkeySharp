@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
@@ -130,12 +131,12 @@ let result = add(five, ten);
         , new Token(Tokens.COMA, ",")
         , new Token(Tokens.IDENT, "y")
         , new Token(Tokens.RPAREN, ")")
-        , new Token(Tokens.LBRACE, ", new Token(")
+        , new Token(Tokens.LBRACE, "{")
         , new Token(Tokens.IDENT, "x")
         , new Token(Tokens.PLUS, "+")
         , new Token(Tokens.IDENT, "y")
         , new Token(Tokens.SEMICOLON, ";")
-        , new Token(Tokens.RBRACE, ")")
+        , new Token(Tokens.RBRACE, "}")
         , new Token(Tokens.SEMICOLON, ";")
         , new Token(Tokens.LET, "let")
         , new Token(Tokens.IDENT, "result")
@@ -157,7 +158,18 @@ let result = add(five, ten);
                 Token token = sut.NextToken();
                 lexTestResult.Add(token);
             }
+
             // Assert
+            int i = 0;
+            foreach (var tok in expectedTokens)
+            {
+               var tokenResult =  lexTestResult[i];
+                Debug.Print($" expected {tok.Literal} - {tok.TokenType}, outcome {tokenResult.Literal} - {tokenResult.TokenType}");
+                if (tokenResult.Literal != tok.Literal) { Debug.Print("Literal is different");}
+                if (tokenResult.TokenType != tok.TokenType) { Debug.Print("TokenType is different"); }
+                i = i + 1;
+            }
+
             CollectionAssert.AreEqual(expectedTokens, lexTestResult, new TokenComparer(), "The simple lexer did not work tokentype is wrong in statement test");
         }
     }
